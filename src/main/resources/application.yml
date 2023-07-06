@@ -1,0 +1,18 @@
+server:
+  port: 9090
+
+spring:
+  datasource:
+    username: postgres
+    password: root123
+
+    url: jdbc:postgresql://localhost:5432/exam2
+    driver-class-name: org.postgresql.Driver
+
+
+  jpa:
+    properties:
+      hibernate:
+        globally_quoted_identifiers=true:
+    hibernate:
+      ddl-auto: update
