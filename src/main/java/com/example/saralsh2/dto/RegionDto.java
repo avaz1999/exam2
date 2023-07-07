@@ -24,8 +24,8 @@ public class RegionDto {
 
     public static List<RegionDto> convertToDtoList(List<Region> all) {
         List<RegionDto> regionDtoList = new ArrayList<>();
-        RegionDto regionDto = new RegionDto();
         for (Region region : all) {
+            RegionDto regionDto = new RegionDto();
             regionDto.setId(region.getId());
             regionDto.setName(region.getName());
             regionDtoList.add(regionDto);

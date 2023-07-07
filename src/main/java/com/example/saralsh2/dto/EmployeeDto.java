@@ -38,7 +38,7 @@ public class EmployeeDto {
         employeeDto.setId(employee.getId());
         employeeDto.setFirstName(employee.getFirstName());
         employeeDto.setLastName(employee.getLastName());
-        employeeDto.setPinfl(employeeDto.getPinfl());
+        employeeDto.setPinfl(employee.getPinfl());
         employeeDto.setHireDate(employee.getHireDate());
         employeeDto.setOrganizationId(employee.getOrganization().getId());
         return employeeDto;

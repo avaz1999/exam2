@@ -34,7 +34,6 @@ public class Employee extends BaseEntity {
         Employee employee = new Employee();
         employee.setFirstName(dto.getFirstName());
         employee.setLastName(dto.getLastName());
-        employee.setPinfl(dto.getPinfl());
         employee.setHireDate(dto.getHireDate());
         employee.setOrganization(organization);
         return employee;

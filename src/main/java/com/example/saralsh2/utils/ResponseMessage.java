@@ -11,4 +11,5 @@ public interface ResponseMessage {
     String PINFL_SIZE = "Pinfl uzunligiga e'ribor qarating";
     String ORGANIZATION_NOT_FOUND = "Organizatsiya topilmadi";
     String EMPLOYEE_NOT_FOUND = "Xodim topilmadi";
+    String CALCULATION_TABLE_NOT_FOUND = "Calculate table topilmadi";
 }

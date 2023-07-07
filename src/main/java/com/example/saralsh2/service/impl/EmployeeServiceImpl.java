@@ -4,6 +4,7 @@ import com.example.saralsh2.base.ApiResponse;
 import com.example.saralsh2.dto.EmployeeDto;
 import com.example.saralsh2.entity.Employee;
 import com.example.saralsh2.entity.Organization;
+import com.example.saralsh2.repository.CalculationTypeRepository;
 import com.example.saralsh2.repository.EmployeeRepository;
 import com.example.saralsh2.repository.OrganizationRepository;
 import com.example.saralsh2.service.EmployeeService;
@@ -17,10 +18,12 @@ import java.util.Optional;
 public class EmployeeServiceImpl implements EmployeeService {
     private final OrganizationRepository organizationRepository;
     private final EmployeeRepository employeeRepository;
+    private final CalculationTypeRepository calculationTypeRepository;
 
-    public EmployeeServiceImpl(OrganizationRepository organizationRepository, EmployeeRepository employeeRepository) {
+    public EmployeeServiceImpl(OrganizationRepository organizationRepository, EmployeeRepository employeeRepository, CalculationTypeRepository calculationTypeRepository) {
         this.organizationRepository = organizationRepository;
         this.employeeRepository = employeeRepository;
+        this.calculationTypeRepository = calculationTypeRepository;
     }
 
     @Override
@@ -38,8 +41,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                 return new ApiResponse<>(false, ResponseMessage.ORGANIZATION_NOT_FOUND);
             Organization organization = organizationById.get();
             Employee employee = Employee.toEntity(dto, organization);
-            employeeRepository.save(employee);
-            EmployeeDto employeeDto = EmployeeDto.toDto(employee);
+            employee.setPinfl(Long.valueOf(pinfl));
+            Employee save = employeeRepository.save(employee);
+            EmployeeDto employeeDto = EmployeeDto.toDto(save);
             return new ApiResponse<>(true, ResponseMessage.SUCCESS, employeeDto);
         } catch (Throwable e) {
             e.printStackTrace();
@@ -50,7 +54,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public ApiResponse<?> edit(EmployeeDto dto) {
         try {
-            if (dto.getId() == null || dto.getOrganizationId() == null)
+            if (dto.getId() == null)
                 return new ApiResponse<>(false,ResponseMessage.OBJECT_IS_NULL);
             Optional<Employee> byId = employeeRepository.findById(dto.getId());
             if (byId.isEmpty()) {
@@ -107,6 +111,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             Optional<Employee> byId = employeeRepository.findById(id);
             if (byId.isEmpty())
                 return new ApiResponse<>(false,ResponseMessage.EMPLOYEE_NOT_FOUND);
+            calculationTypeRepository.deleteByEmployeeId(id);
             employeeRepository.deleteById(id);
             return new ApiResponse<>(true,ResponseMessage.DELETE);
         }catch (Throwable e){

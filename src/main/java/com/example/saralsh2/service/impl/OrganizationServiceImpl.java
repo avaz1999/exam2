@@ -2,8 +2,11 @@ package com.example.saralsh2.service.impl;
 
 import com.example.saralsh2.base.ApiResponse;
 import com.example.saralsh2.dto.OrganizationDto;
+import com.example.saralsh2.entity.CalculationTable;
+import com.example.saralsh2.entity.Employee;
 import com.example.saralsh2.entity.Organization;
 import com.example.saralsh2.entity.Region;
+import com.example.saralsh2.repository.CalculationTypeRepository;
 import com.example.saralsh2.repository.EmployeeRepository;
 import com.example.saralsh2.repository.OrganizationRepository;
 import com.example.saralsh2.repository.RegionRepository;
@@ -19,11 +22,13 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final OrganizationRepository organizationRepository;
     private final RegionRepository regionRepository;
     private final EmployeeRepository employeeRepository;
+    private final CalculationTypeRepository calculationTypeRepository;
 
-    public OrganizationServiceImpl(OrganizationRepository organizationRepository, RegionRepository regionRepository, EmployeeRepository employeeRepository) {
+    public OrganizationServiceImpl(OrganizationRepository organizationRepository, RegionRepository regionRepository, EmployeeRepository employeeRepository, CalculationTypeRepository calculationTypeRepository) {
         this.organizationRepository = organizationRepository;
         this.regionRepository = regionRepository;
         this.employeeRepository = employeeRepository;
+        this.calculationTypeRepository = calculationTypeRepository;
     }
 
     @Override
@@ -40,7 +45,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             Organization organization = Organization.toEntity(dto, region);
             organizationRepository.save(organization);
             OrganizationDto organizationDto = OrganizationDto.toDto(organization);
-            return new ApiResponse<>(true, ResponseMessage.SUCCESS,organizationDto);
+            return new ApiResponse<>(true, ResponseMessage.SUCCESS, organizationDto);
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -50,7 +55,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public ApiResponse<?> editOrganization(OrganizationDto dto) {
         try {
-            if (dto.getId() == null || dto.getRegionId() == null)
+            if (dto.getId() == null)
                 return new ApiResponse<>(false, ResponseMessage.OBJECT_IS_NULL);
 
             Optional<Region> byId = regionRepository.findById(dto.getRegionId());
@@ -65,8 +70,9 @@ public class OrganizationServiceImpl implements OrganizationService {
             Organization organization = organizationById.get();
             organization.setName(dto.getName());
             organization.setRegion(region);
-            organizationRepository.save(organization);
-            return new ApiResponse<>(true,ResponseMessage.SUCCESS);
+            Organization save = organizationRepository.save(organization);
+            OrganizationDto organizationDto = OrganizationDto.toDto(save);
+            return new ApiResponse<>(true, ResponseMessage.SUCCESS, organizationDto);
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -104,12 +110,19 @@ public class OrganizationServiceImpl implements OrganizationService {
     public ApiResponse<?> deleteOrganization(Long id) {
         try {
             if (id == null) return new ApiResponse<>(false, ResponseMessage.OBJECT_IS_NULL);
-            employeeRepository.deleteByOrganizationId(id);
+            List<Employee> employeeByOrganizationId = employeeRepository.findEmployeesByOrganizationId(id);
+            List<CalculationTable> calculationTablesByOrganizationId = calculationTypeRepository.findCalculationTablesByOrganizationId(id);
+            if (employeeByOrganizationId.isEmpty() || calculationTablesByOrganizationId.isEmpty()){
+                    organizationRepository.deleteById(id);
+                    return new ApiResponse<>(true, ResponseMessage.DELETE);
+            }
+            calculationTypeRepository.deleteAll(calculationTablesByOrganizationId);
+            employeeRepository.deleteAll(employeeByOrganizationId);
             organizationRepository.deleteById(id);
             return new ApiResponse<>(true, ResponseMessage.DELETE);
         } catch (Throwable e) {
             e.printStackTrace();
+            return new ApiResponse<>(false, ResponseMessage.SERVER_ERROR);
         }
-        return new ApiResponse<>(false, ResponseMessage.SERVER_ERROR);
     }
 }
