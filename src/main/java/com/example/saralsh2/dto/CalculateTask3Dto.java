@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class CalculateTask3Dto {
-    private Long id;
+    private Long firstName;
+    private Long lastName;
     private Long organizationCount;
     private Double averagePrice;
 }

@@ -26,7 +26,7 @@ public class CalculationTableDto {
         CalculationTableDto calculationTableDto = new CalculationTableDto();
         calculationTableDto.setId(entity.getId());
         calculationTableDto.setAmount(entity.getAmount());
-        calculationTableDto.setDate(entity.getDate());
+        calculationTableDto.setDate(entity.getLocalDate());
         calculationTableDto.setRate(entity.getRate());
         calculationTableDto.setCalculationType(entity.getCalculationType());
         calculationTableDto.setOrganizationId(entity.getOrganization().getId());
@@ -41,7 +41,7 @@ public class CalculationTableDto {
             calculationTableDto.setId(calculationTable.getId());
             calculationTableDto.setAmount(calculationTable.getAmount());
             calculationTableDto.setRate(calculationTable.getRate());
-            calculationTableDto.setDate(calculationTable.getDate());
+            calculationTableDto.setDate(calculationTable.getLocalDate());
             calculationTableDto.setOrganizationId(calculationTable.getOrganization().getId());
             calculationTableDto.setEmployeeId(calculationTable.getEmployee().getId());
             calculationTableDto.setCalculationType(calculationTable.getCalculationType());

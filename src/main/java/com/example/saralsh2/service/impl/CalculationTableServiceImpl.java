@@ -1,6 +1,7 @@
 package com.example.saralsh2.service.impl;
 
 import com.example.saralsh2.base.ApiResponse;
+import com.example.saralsh2.dto.CalculateTask3Dto;
 import com.example.saralsh2.dto.CalculationTableDto;
 import com.example.saralsh2.entity.CalculationTable;
 import com.example.saralsh2.entity.Employee;
@@ -14,6 +15,8 @@ import com.example.saralsh2.service.CalculationTableService;
 import com.example.saralsh2.utils.ResponseMessage;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -129,13 +132,15 @@ public class CalculationTableServiceImpl implements CalculationTableService {
     }
 
     @Override
-    public ApiResponse<?> tsk3() {
-//        try {
-//            List<Region> allRegions = regionRepository.findAll();
-//            List<Employee> allEmployees = employeeRepository.findAll();
-//            List<Organization> allOrganizations = organizationRepository.findAll();
-//            List<CalculationTable> allCalculationTables = calculationTypeRepository.findAll();
-//        }
-        return null;
+    public ApiResponse<?> tsk3(String data) {
+        try {
+            DateTimeFormatter df = DateTimeFormatter .ofPattern("d-MMM-yyyy");
+            LocalDate date = LocalDate.parse(data,df);
+            List<CalculateTask3Dto> task3 = calculationTypeRepository.getTask3(date);
+            return new ApiResponse<>(true,ResponseMessage.SUCCESS,task3);
+        }catch (Throwable e){
+            e.printStackTrace();
+        }
+        return new ApiResponse<>(false,ResponseMessage.SERVER_ERROR);
     }
 }

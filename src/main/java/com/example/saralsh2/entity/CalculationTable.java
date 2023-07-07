@@ -13,7 +13,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
@@ -23,7 +22,7 @@ import java.time.LocalDateTime;
 public class CalculationTable extends BaseEntity {
     private Double amount;
     private Double rate;
-    private LocalDate date;
+    private LocalDate localDate;
     @Enumerated(EnumType.STRING)
     private CalculationType calculationType;
     @ManyToOne
@@ -35,7 +34,7 @@ public class CalculationTable extends BaseEntity {
     public static CalculationTable toEntity(CalculationTableDto dto, Employee employee, Organization organization) {
         CalculationTable calculationTable = new CalculationTable();
         calculationTable.setAmount(dto.getAmount());
-        calculationTable.setDate(dto.getDate());
+        calculationTable.setLocalDate(dto.getDate());
         calculationTable.setRate(dto.getRate());
         calculationTable.setCalculationType(dto.getCalculationType());
         calculationTable.setOrganization(organization);
@@ -45,7 +44,7 @@ public class CalculationTable extends BaseEntity {
 
     public static CalculationTable toUpdateEntity(CalculationTable calculationTable,CalculationTableDto dto, Organization organization, Employee employee) {
         calculationTable.setAmount(dto.getAmount() != null ? dto.getAmount() : calculationTable.getAmount());
-        calculationTable.setDate(dto.getDate() != null ? dto.getDate() : calculationTable.getDate());
+        calculationTable.setLocalDate(dto.getDate() != null ? dto.getDate() : calculationTable.getLocalDate());
         calculationTable.setRate(dto.getRate() != null ? dto.getRate() : calculationTable.getRate());
         calculationTable.setCalculationType(dto.getCalculationType() != null ? dto.getCalculationType() : calculationTable.getCalculationType());
         calculationTable.setOrganization(organization != null ? organization : calculationTable.getOrganization());

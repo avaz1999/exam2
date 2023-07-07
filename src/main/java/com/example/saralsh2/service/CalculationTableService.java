@@ -3,6 +3,8 @@ package com.example.saralsh2.service;
 import com.example.saralsh2.base.ApiResponse;
 import com.example.saralsh2.dto.CalculationTableDto;
 
+import java.time.LocalDate;
+
 public interface CalculationTableService {
     ApiResponse<?> create(CalculationTableDto dto);
 
@@ -13,5 +15,6 @@ public interface CalculationTableService {
     ApiResponse<?> getById(Long id);
 
     ApiResponse<?> delete(Long id);
-    ApiResponse<?> tsk3();
+
+    ApiResponse<?> tsk3(String date);
 }

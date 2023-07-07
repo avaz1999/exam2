@@ -6,6 +6,8 @@ import com.example.saralsh2.service.CalculationTableService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/api/calculate")
 public class CalculationTableController {
@@ -34,5 +36,9 @@ public class CalculationTableController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id){
         return ApiResponse.controller(calculationTableService.delete(id));
+    }
+    @GetMapping("/task3")
+    public ResponseEntity<?> getTask3(@RequestBody String data){
+        return ApiResponse.controller(calculationTableService.tsk3(data));
     }
 }
